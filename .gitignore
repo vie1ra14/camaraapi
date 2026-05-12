@@ -1,0 +1,10 @@
+__pycache__/
+.mypy_cache
+.env
+.venv
+alembic
+.vscode
+*.pyc
+*.pyo
+*.pyd
+alembic.ini

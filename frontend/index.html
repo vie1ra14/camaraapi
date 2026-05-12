@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
+
+    input, button {
+      margin: 5px;
+      padding: 8px;
+    }
+
+    #resultado {
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Consulta de Deputados</h1>
+
+  <input type="text" id="uf" placeholder="UF">
+  <input type="text" id="partido" placeholder="Partido">
+
+  <br>
+
+  <button onclick="buscar()">
+    Enviar
+  </button>
+
+  <button onclick="resumo()">
+    Resumo
+  </button>
+
+  <div id="resultado"></div>
+
+  <script>
+    async function buscar() {
+      const uf = document.getElementById("uf").value.toUpperCase();
+      const partido = document.getElementById("partido").value.toUpperCase();
+
+      const params = new URLSearchParams();
+
+      if (uf) params.append("uf", uf);
+      if (partido) params.append("partido", partido);
+
+      const url = `http://127.0.0.1:8000/deputados?${params.toString()}`;
+
+      const resposta = await fetch(url);
+      const dados = await resposta.json();
+
+      document.getElementById("resultado").innerHTML = dados.map(dep => `
+         <div style="
+        display:flex;
+        align-items:center;
+        gap:10px;
+        border:1px solid #ddd;
+        padding:10px;
+        border-radius:8px;
+        margin:10px 0;
+      ">
+        <img src="${dep.urlFoto}" width="80" style="border-radius:50%" />
+
+        <div>
+          <div><b>Nome: ${dep.nome}</b></div>
+          <div>UF: ${dep.siglaUf}</div>
+          <div>Partido: ${dep.siglaPartido}</div>
+          <div>Email: ${dep.email}</div>
+        </div>
+      </div>
+    `).join("");
+      }
+
+      async function resumo() {
+        const url = `http://127.0.0.1:8000/resumo`;
+
+        const resposta = await fetch(url);
+        const dados = await resposta.json();
+
+        document.getElementById("resultado").innerHTML = `
+          <h2>Resumo</h2>
+          <p>Total de Deputados:</b> ${dados.total_deputados}</p>
+          <h3>Por Estado:</h3>
+          <ul>
+            ${Object.entries(dados.por_estado).map(([uf, count]) => `<li>${uf}: ${count}</li>`).join("")}
+          </ul>
+        `;
+      }
+  </script>
+
+</body>
+</html>
