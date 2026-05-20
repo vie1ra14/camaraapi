@@ -6,7 +6,7 @@ app = FastAPI(title="API Pública - Dados Abertos da Câmara dos Deputados")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://camara-api.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
