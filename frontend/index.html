@@ -41,6 +41,7 @@
   <div id="resultado"></div>
 
   <script>
+    const API_BASE = "https://camaraapi.onrender.com";
     async function buscar() {
       const uf = document.getElementById("uf").value.toUpperCase();
       const partido = document.getElementById("partido").value.toUpperCase();
@@ -50,7 +51,7 @@
       if (uf) params.append("uf", uf);
       if (partido) params.append("partido", partido);
 
-      const url = `http://127.0.0.1:8000/deputados?${params.toString()}`;
+      const url = `${API_BASE}/deputados?${params.toString()}`;
 
       const resposta = await fetch(url);
       const dados = await resposta.json();
@@ -78,7 +79,7 @@
       }
 
       async function resumo() {
-        const url = `http://127.0.0.1:8000/resumo`;
+        const url = `${API_BASE}/resumo`;
 
         const resposta = await fetch(url);
         const dados = await resposta.json();
